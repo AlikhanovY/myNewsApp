@@ -6,51 +6,38 @@
 //
 
 import Foundation
-protocol NewsModelDelegate{
-    func newsUpdate(_ newsManager: NewsManager, news: NewsModel)
-}
-struct NewsManager{
-    var delegate : NewsModelDelegate?
+
+struct NewsManager{    
+    typealias CompletionHandler = (NewsData) -> Void
     
-    let newsApi = "https://newsapi.org/v2/everything?q=Apple&from=2024-08-06&sortBy=popularity&apiKey=e16f87027018476481f2366c3d5eaa5e"
+    let newsApi = "https://newsapi.org/v2/everything?q=Apple&from=2024-08-10&sortBy=popularity&apiKey=e16f87027018476481f2366c3d5eaa5e"
     
-    func fetchNews(requestName : String){
-        let urlString = "https://newsapi.org/v2/everything?q=\(requestName)&from=2024-08-06&sortBy=popularity&apiKey=e16f87027018476481f2366c3d5eaa5e"
-        performRequest(urlString: urlString)
+    func fetchNews(requestName : String, completion: @escaping CompletionHandler){
+        let urlString = "https://newsapi.org/v2/everything?q=\(requestName)&from=2024-09-06&sortBy=popularity&apiKey=e16f87027018476481f2366c3d5eaa5e"
+        performRequest(urlString: urlString, completion: completion)
     }
-    func performRequest(urlString: String){
+    func performRequest(urlString: String, completion: @escaping CompletionHandler){
         if let url = URL(string: urlString){
             let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: url) { data, response, error in
-                if let e = error{
-                    print(e)
+            let task = session.dataTask(with: url) {data, response, error in
+                if error != nil {
+                    print(error!)
                     return
                 }
                 if let safeData = data{
-                    if let news = self.parseJSON(safeData){
-                        delegate?.newsUpdate(self, news: news)
-                    }
+                    do {
+                    let decoderData = try JSONDecoder().decode(NewsData.self, from: safeData)
+                    completion(decoderData)
+                        } catch {
+                            print(error)
+                        }
                 }
-                
             }
+            task.resume()
         }
+    }
         
         
     }
-    func parseJSON(_ newsData : Data) -> NewsModel?{
-        let decoder = JSONDecoder()
-        do{
-            let decodedData =  try decoder.decode(NewsData.self, from: newsData)
-            let author = decodedData.articels[0].author
-            let description = decodedData.articels[0].description
-            let title = decodedData.articels[0].title
-            let news = NewsModel(author: author, title: title, descrpition: description)
-            return news
-            
-        }catch{
-            print("Error happend")
-        }
-        return nil
-    }
-}
+
 

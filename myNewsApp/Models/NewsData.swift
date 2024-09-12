@@ -7,11 +7,12 @@
 
 import Foundation
 struct NewsData: Decodable {
-    let articels : [Articles]
+    let articles : [Articles]
 }
 struct Articles : Decodable{
-    let author : String
-    let title : String
-    let description : String
+    let author : String?
+    let title : String?
+    let description : String?
+    let urlToImage: String?
     
 }
