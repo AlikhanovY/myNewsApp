@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import SafariServices
 class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
    
     @IBOutlet weak var tableView: UITableView!
@@ -48,7 +48,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
                 }
             }
         }
-        print(textField.text)
     }
     @objc func newFetch(){
         newsManager.fetchNews(requestName: "everything") { [weak self] newsData in
@@ -70,6 +69,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
             cell.setImage(urlString: article.urlToImage)
         }
         return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let articles = newsData?.articles[indexPath.row], let url = URL(string: articles.url!){
+             let safariViewController = SFSafariViewController(url: url)
+            present(safariViewController, animated: true)
+            
+        }
     }
 }
 

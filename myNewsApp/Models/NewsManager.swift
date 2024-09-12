@@ -10,7 +10,7 @@ import Foundation
 struct NewsManager{    
     typealias CompletionHandler = (NewsData) -> Void
     
-    let newsApi = "https://newsapi.org/v2/everything?q=Apple&from=2024-08-10&sortBy=popularity&apiKey=e16f87027018476481f2366c3d5eaa5e"
+    let newsApi = "https://newsapi.org/v2/everything?q=Apple&from=2024-09-01&sortBy=popularity&apiKey=e16f87027018476481f2366c3d5eaa5e"
     
     func fetchNews(requestName : String, completion: @escaping CompletionHandler){
         let urlString = "https://newsapi.org/v2/everything?q=\(requestName)&from=2024-09-06&sortBy=popularity&apiKey=e16f87027018476481f2366c3d5eaa5e"
