@@ -14,8 +14,21 @@ class NewTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
     }
+  
+        override func layoutSubviews() {
+            super.layoutSubviews()
+
+            let margins = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10) // Adjust as needed
+            contentView.frame = contentView.frame.inset(by: margins)
+            contentView.layer.cornerRadius = 15
+            contentView.layer.masksToBounds = true
+            contentView.layer.borderWidth = 1.0
+            contentView.layer.borderColor = UIColor.lightGray.cgColor
+        }
+    
+
     func setImage(urlString: String?) {
         newsImage.image = nil
 

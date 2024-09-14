@@ -22,6 +22,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         tableView.register(UINib(nibName: "NewTableViewCell", bundle: nil), forCellReuseIdentifier: NewTableViewCell.cell)
         
         timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(newFetch), userInfo: nil, repeats: false)
+        tableView.rowHeight = 140
     }
     @IBAction func searchPressed(_ sender: UIButton) {
         if let text = searchTextField.text{
@@ -66,7 +67,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: NewTableViewCell.cell, for: indexPath) as! NewTableViewCell
         if let article = newsData?.articles[indexPath.row] {
             cell.titleLabel.text = article.title
-            cell.setImage(urlString: article.urlToImage)
+            if let imageURL = article.urlToImage{
+                cell.setImage(urlString: imageURL)
+            }
+            else{
+                cell.newsImage.image = UIImage(named: "placeholder")
+            }
         }
         return cell
     }
